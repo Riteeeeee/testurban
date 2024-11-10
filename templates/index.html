@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Real-Time Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; background: #f4f4f4; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 8px; background: #ddd; margin-bottom: 2px; }
+        #msg { padding: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Real-Time Chat</h2>
+    <ul id="messages"></ul>
+    <input id="msg" type="text" placeholder="Type a message...">
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Emit message when the user presses "Enter"
+        document.getElementById('msg').addEventListener('keypress', function(event) {
+            if (event.keyCode === 13) {
+                socket.send(document.getElementById('msg').value);
+                document.getElementById('msg').value = '';
+            }
+        });
+
+        // Listen for messages from the server and update the UI
+        socket.on('message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            document.getElementById('messages').appendChild(item);
+        });
+    </script>
+</body>
+</html>
