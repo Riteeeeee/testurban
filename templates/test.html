@@ -1,0 +1,110 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Customer List</title>-->
+<!--    <style>-->
+<!--        .customer-box {-->
+<!--            border: 1px solid #ccc;-->
+<!--            padding: 10px;-->
+<!--            margin: 10px 0;-->
+<!--        }-->
+<!--        .customer-info {-->
+<!--            font-weight: bold;-->
+<!--        }-->
+<!--    </style>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h1>Customer List</h1>-->
+
+<!--<div id="customer-container">-->
+<!--    {% for name, room in customers.items() %}-->
+<!--        <div class="customer-box">-->
+<!--            <div class="customer-info">-->
+<!--                {{ name }} - {{ room }}-->
+<!--            </div>-->
+<!--            <button onclick="acceptCustomer('{{ name }}', '{{ room }}')">Accept</button>-->
+<!--        </div>-->
+<!--    {% endfor %}-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    const socket = io();-->
+
+<!--    function acceptCustomer(name, room) {-->
+<!--        // Emit the 'join_room' event with the name and room data-->
+<!--        socket.emit('join_room', { name: name, room: room });-->
+<!--    }-->
+
+<!--    // Listen for confirmation of joining the room-->
+<!--    socket.on('join_confirmation', (data) => {-->
+<!--        alert(data.message);-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <style>
+        .customer-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .customer-info {
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+
+<h1>Customer List</h1>
+
+<div id="customer-container">
+    {% for name, room in customers.items() %}
+        <div class="customer-box">
+            <div class="customer-info">
+                {{ name }} - {{ room }}
+            </div>
+            <button onclick="acceptCustomer('{{ name }}', '{{ room }}')">Accept</button>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    const socket = io();
+
+    function acceptCustomer(name, room) {
+        // Emit the 'join_room' event with the room data
+        socket.emit('join_room', { name: name, room: room });
+    }
+
+    // Listen for the redirection event and redirect the user
+    socket.on('redirect_to_room', (data) => {
+        window.location.href = data.url;  // Redirect to the room page
+    });
+
+    // Confirmation message for room entry
+    socket.on('join_confirmation', (data) => {
+        alert(data.message);
+    });
+</script>
+
+
+</body>
+</html>
+
